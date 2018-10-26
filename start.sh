@@ -11,6 +11,8 @@ set -e
 : ${GANESHA_PSEUDO_PATH:="/"}
 : ${GANESHA_NFS_PROTOCOLS:="3,4"}
 : ${GANESHA_TRANSPORTS:="UDP,TCP"}
+: ${GANESHA_ACCESS:="*"}
+: ${GANESHA_ROOT_ACCESS:="*"}
 : ${GANESHA_BOOTSTRAP_CONFIG:="yes"}
 
 function ensure_mtab {
@@ -21,8 +23,24 @@ function ensure_mtab {
 
 function bootstrap_config {
   echo "Bootstrapping Ganesha NFS config"
-  cat <<END >${GANESHA_CONFIGFILE}
 
+  local squash="Root_Squash"
+  local global_access="RW";
+
+  if [ "$GANESHA_ACCESS" != "*" ]; then
+    if [ -n "$GANESHA_ACCESS" ]; then
+      local ganesha_client="$(echo -e "CLIENT {\n    Clients = \"${GANESHA_ACCESS}\";\n    Squash = Root_Squash;\n    Access_Type = RW;\n  }")"
+    fi
+    global_access="None"
+  fi
+
+  if [ "$GANESHA_ROOT_ACCESS" != "*" ] && [ -n "$GANESHA_ROOT_ACCESS" ]; then
+    local ganesha_root_client="$(echo -e "CLIENT {\n    Clients = \"${GANESHA_ROOT_ACCESS}\";\n    Squash = No_Root_Squash;\n    Access_Type = RW;\n  }")"
+  elif [ "$GANESHA_ROOT_ACCESS" == "*" ]; then
+    squash="No_Root_Squash"
+  fi
+
+  cat <<END >${GANESHA_CONFIGFILE}
 # NFS protocol options
 EXPORT
 {
@@ -36,13 +54,16 @@ EXPORT
   Pseudo = ${GANESHA_PSEUDO_PATH};
 
   # Access control options
-  Access_Type = RW;
-  Squash = No_Root_Squash;
+  Access_Type = $global_access;
+  Squash = $squash;
 
   # NFS protocol options
   SecType = "sys";
   Transports = ${GANESHA_TRANSPORTS};
   Protocols = ${GANESHA_NFS_PROTOCOLS};
+
+  $ganesha_client
+  $ganesha_root_client
 
   # Exporting FSAL
   FSAL {
