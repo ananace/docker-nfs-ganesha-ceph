@@ -38,8 +38,8 @@ EXPORT
 
   # NFS protocol options
   SecType = "sys";
-  Transports = "${GANESHA_TRANSPORTS}";
-  Protocols = "${GANESHA_NFS_PROTOCOLS}";
+  Transports = ${GANESHA_TRANSPORTS};
+  Protocols = ${GANESHA_NFS_PROTOCOLS};
 
   # Exporting FSAL
   FSAL {
