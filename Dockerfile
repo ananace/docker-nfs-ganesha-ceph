@@ -8,7 +8,6 @@ LABEL Name=nfs-ganesha-ceph \
 RUN DEBIAN_FRONTEND=noninteractive \
  && apt-get update \
  && apt-get install -y gnupg --no-install-recommends \
- && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 10353E8834DC57CA \
  && curl -sSL 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x10353E8834DC57CA' | apt-key add - \
  && echo "deb http://ppa.launchpad.net/nfs-ganesha/nfs-ganesha-2.7/ubuntu bionic main" > /etc/apt/sources.list.d/nfs-ganesha.list \
  && echo "deb http://ppa.launchpad.net/nfs-ganesha/libntirpc-1.7/ubuntu bionic main" > /etc/apt/sources.list.d/libntirpc.list \
