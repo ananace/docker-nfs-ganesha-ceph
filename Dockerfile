@@ -7,13 +7,13 @@ LABEL Name=nfs-ganesha-ceph \
 # install prerequisites
 RUN DEBIAN_FRONTEND=noninteractive \
  && apt-get update \
- && apt-get install -y gnupg --no-install-recommends \
+ && apt-get install -y gnupg curl --no-install-recommends \
  && curl -sSL 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x10353E8834DC57CA' | apt-key add - \
  && echo "deb http://ppa.launchpad.net/nfs-ganesha/nfs-ganesha-2.7/ubuntu bionic main" > /etc/apt/sources.list.d/nfs-ganesha.list \
  && echo "deb http://ppa.launchpad.net/nfs-ganesha/libntirpc-1.7/ubuntu bionic main" > /etc/apt/sources.list.d/libntirpc.list \
  && apt-get update \
  && apt-get install -y liburcu6 netbase nfs-common dbus nfs-ganesha nfs-ganesha-ceph nfs-ganesha-vfs --no-install-recommends \
- && apt-get remove -y gnupg \
+ && apt-get remove -y curl gnupg \
  && apt-get autoremove -y \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
