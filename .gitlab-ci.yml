@@ -3,7 +3,7 @@ stages:
   - build
   - promote
 
-images:
+build:image:
   stage: build
   image:
     name: gcr.io/kaniko-project/executor:debug
@@ -15,12 +15,11 @@ images:
   only:
     - master
 
-promote:
+promote:image:
   stage: promote
   image: ananace/skopeo
   script:
     - /skopeo copy --src-creds "${CI_REGISTRY_USER}:${CI_JOB_TOKEN}" --dest-creds "${PROMOTE_USER}:${PROMOTE_PASS}" "docker://${CI_REGISTRY_IMAGE}:latest" "docker://${PROMOTE_IMAGE}:latest"
-    - /skopeo copy --src-creds "${CI_REGISTRY_USER}:${CI_JOB_TOKEN}" --dest-creds "${PROMOTE_USER}:${PROMOTE_PASS}" "docker://${CI_REGISTRY_IMAGE}:latest-checks" "docker://${PROMOTE_IMAGE}:latest-checks"
   only:
     refs:
       - master
