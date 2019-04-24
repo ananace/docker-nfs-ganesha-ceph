@@ -20,6 +20,8 @@ promote:image:
   image: ananace/skopeo
   script:
     - /skopeo copy --src-creds "${CI_REGISTRY_USER}:${CI_JOB_TOKEN}" --dest-creds "${PROMOTE_USER}:${PROMOTE_PASS}" "docker://${CI_REGISTRY_IMAGE}:latest" "docker://${PROMOTE_IMAGE}:latest"
+  variables:
+    GIT_STRATEGY: none
   only:
     refs:
       - master
