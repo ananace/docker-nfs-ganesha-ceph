@@ -90,8 +90,13 @@ function init_rpc {
 
 function init_dbus {
   echo "Starting dbus"
+
+  # Ensure folder structure exists
+  mkdir -p /var/run/dbus
+  chown messagebus:messagebus /var/run/dbus
   rm -f /var/run/dbus/system_bus_socket
   rm -f /var/run/dbus/pid
+
   dbus-uuidgen --ensure
   dbus-daemon --system --fork
   sleep 1
