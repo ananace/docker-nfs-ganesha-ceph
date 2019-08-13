@@ -12,7 +12,7 @@ RUN DEBIAN_FRONTEND=noninteractive \
  && echo "deb http://ppa.launchpad.net/nfs-ganesha/nfs-ganesha-2.8/ubuntu bionic main" > /etc/apt/sources.list.d/nfs-ganesha.list \
  && echo "deb http://ppa.launchpad.net/nfs-ganesha/libntirpc-1.8/ubuntu bionic main" > /etc/apt/sources.list.d/libntirpc.list \
  && apt-get update \
- && apt-get install -y liburcu6 netbase nfs-common dbus nfs-ganesha nfs-ganesha-ceph nfs-ganesha-vfs libnss-sss netcat --no-install-recommends \
+ && apt-get install -y liburcu6 netbase nfs-common dbus nfs-ganesha nfs-ganesha-ceph nfs-ganesha-rgw nfs-ganesha-vfs libnss-sss netcat --no-install-recommends \
  && apt-get remove -y curl gnupg \
  && apt-get autoremove -y \
  && apt-get clean \
